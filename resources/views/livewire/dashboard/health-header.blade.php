@@ -5,24 +5,26 @@
         <div>
 
             <h1 class="text-3xl font-bold text-white">
-
                 Mission Control
-
             </h1>
 
             <p class="mt-2 text-slate-400">
-
                 Enterprise Infrastructure Control Platform
-
             </p>
+
+            <div class="mt-4 text-sm text-slate-500">
+                Host :
+                {{ $overview['system']['hostname'] }}
+            </div>
 
         </div>
 
         <div class="text-right">
 
-            <x-qf.badge variant="success">
+            <x-qf.badge
+                :variant="$overview['health']['score'] >= 85 ? 'success' : 'warning'">
 
-                Healthy
+                {{ $overview['health']['status'] }}
 
             </x-qf.badge>
 
@@ -30,13 +32,20 @@
 
                 <div class="text-4xl font-bold text-white">
 
-                    100%
+                    {{ $overview['health']['score'] }}%
 
                 </div>
 
                 <div class="text-sm text-slate-400">
 
                     Infrastructure Health
+
+                </div>
+
+                <div class="mt-2 text-xs text-slate-500">
+
+                    Last Update :
+                    {{ now()->format('H:i:s') }}
 
                 </div>
 
