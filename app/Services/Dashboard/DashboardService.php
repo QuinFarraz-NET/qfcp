@@ -28,6 +28,8 @@ class DashboardService
 
             'cpu' => $snapshot->cpu,
 
+	    'laravel' => app()->version(),
+
             'memory' => $snapshot->memory,
 
             'disk' => $snapshot->disk,

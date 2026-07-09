@@ -17,6 +17,26 @@
                 {{ $overview['system']['hostname'] }}
             </div>
 
+<div class="mt-3 space-y-1 text-xs text-slate-500">
+
+    <div>
+        OS :
+        {{ $overview['system']['os'] }}
+    </div>
+
+    <div>
+        PHP :
+        {{ $overview['system']['php'] }}
+    </div>
+
+    <div>
+        Laravel :
+        {{ $overview['system']['laravel'] }}
+    </div>
+
+</div>
+
+
         </div>
 
         <div class="text-right">
@@ -45,8 +65,7 @@
                 <div class="mt-2 text-xs text-slate-500">
 
                     Last Update :
-                    {{ now()->format('H:i:s') }}
-
+		    {{ now()->format('H:i:s') }} WIB
                 </div>
 
             </div>
