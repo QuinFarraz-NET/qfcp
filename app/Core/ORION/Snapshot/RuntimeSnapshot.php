@@ -10,6 +10,7 @@ final readonly class RuntimeSnapshot
     public function __construct(
         public array $telemetry,
         public array $services,
+	public array $website,
         public HealthReport $health,
         public SystemInfo $system,
         public string $version,
@@ -29,6 +30,8 @@ final readonly class RuntimeSnapshot
             'health' => $this->health->toArray(),
 
             'system' => $this->system->toArray(),
+
+	    'website' => $this->website,
 
             'version' => $this->version,
 

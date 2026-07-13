@@ -3,6 +3,7 @@
 namespace App\Core\ORION\Runtime;
 
 use App\Core\ORION\Capability\CapabilityRegistry;
+use App\Core\ORION\Capability\Website\WebsiteProbe;
 use App\Core\ORION\Health\HealthEngine;
 use App\Core\ORION\Health\HealthReport;
 use App\Core\ORION\Snapshot\RuntimeSnapshot;
@@ -23,7 +24,8 @@ final class Runtime
         protected InfrastructureService $infrastructure,
         protected HealthEngine $healthEngine,
         protected CapabilityRegistry $capabilities,
-    ) {
+ 	protected WebsiteProbe $website, 
+  ) {
     }
 
     public function version(): string
@@ -41,6 +43,10 @@ final class Runtime
         if ($this->snapshot !== null) {
             return $this->snapshot;
         }
+
+	$website = $this->website
+	    ->collect()
+	    ->toArray();
 
         $infra = $this->infrastructure->snapshot();
 
@@ -63,7 +69,9 @@ final class Runtime
             version: $this->version(),
             status: $this->status(),
             generatedAt: new DateTimeImmutable(),
+	    website: $website,
         );
+
 
         return $this->snapshot;
     }

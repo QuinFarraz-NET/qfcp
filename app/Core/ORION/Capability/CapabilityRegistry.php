@@ -35,13 +35,14 @@ final class CapabilityRegistry
                 description: 'WireGuard Management Module',
             ),
 
-            new Capability(
-                name: 'Website',
-                version: '0.1',
-                enabled: false,
-                healthy: false,
-                description: 'Website Monitoring Module',
-            ),
+new Capability(
+    name: 'Website',
+    version: '1.0',
+    enabled: true,
+    healthy: true,
+    description: 'Website Monitoring Module',
+),
+
 
             new Capability(
                 name: 'Database',
