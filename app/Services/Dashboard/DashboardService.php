@@ -2,54 +2,48 @@
 
 namespace App\Services\Dashboard;
 
-use App\Core\QFSense\TelemetryService;
-use App\Services\System\SystemService;
+use App\Core\ORION\Runtime\Runtime;
 
 class DashboardService
 {
     public function __construct(
-        protected SystemService $system,
-        protected TelemetryService $telemetry,
-        protected HealthScoreService $health,
+        protected Runtime $runtime,
     ) {
     }
 
     public function overview(): array
     {
-        $snapshot = $this->telemetry->snapshot();
-
-        $system = [
-
-            'hostname' => $this->system->hostname(),
-
-            'php' => $this->system->phpVersion(),
-
-            'os' => $this->system->os(),
-
-            'cpu' => $snapshot->cpu,
-
-	    'laravel' => app()->version(),
-
-            'memory' => $snapshot->memory,
-
-            'disk' => $snapshot->disk,
-
-            'network' => $snapshot->network,
-
-            'uptime' => $snapshot->uptime,
-
-        ];
+        $snapshot = $this->runtime->snapshot();
 
         return [
 
-            'system' => $system,
+            'system' => [
 
-            'health' => $this->health->calculate(
-                $system,
-                $snapshot->services
-            ),
+                ...$snapshot->system->toArray(),
+
+                'cpu' => $snapshot->telemetry['cpu'] ?? [],
+
+                'memory' => $snapshot->telemetry['memory'] ?? [],
+
+                'disk' => $snapshot->telemetry['disk'] ?? [],
+
+                'network' => $snapshot->telemetry['network'] ?? [],
+
+                'uptime' => $snapshot->telemetry['uptime'] ?? [],
+
+            ],
+
+            'health' => $snapshot->health->toArray(),
 
             'services' => $snapshot->services,
+
+            'telemetry' => $snapshot->telemetry,
+
+            'version' => $snapshot->version,
+
+            'status' => $snapshot->status,
+
+            'generatedAt' => $snapshot->generatedAt->format('Y-m-d H:i:s'),
 
             'vpn' => [],
 

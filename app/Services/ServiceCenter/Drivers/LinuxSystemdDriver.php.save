@@ -1,0 +1,94 @@
+<?php
+
+namespace App\Services\ServiceCenter\Drivers;
+
+class LinuxSystemdDriver
+{
+    protected array $services = [
+
+        'nginx' => 'Nginx',
+
+        'php8.3-fpm' => 'PHP-FPM',
+
+        'mariadb' => 'MariaDB',
+
+        'wg-quick@wg0' => 'WireGuard',
+
+    ];
+
+    public function services(): array
+    {
+        $result = [];
+
+        foreach ($this->services as $unit => $display) {
+
+            $result[] = [
+
+                'name' => $unit,
+
+                'displayName' => $display,
+
+                'running' => $this->isRunning($unit),
+
+                'enabled' => $this->isEnabled($unit),
+
+            ];
+
+        }
+
+        return $result;
+    }
+
+
+protected function serviceProperties(string $service): array
+{
+    $properties = [];
+
+    exec(
+        "systemctl show {$service} --no-page "
+        . "-p MainPID "
+        . "-p Description "
+        . "-p ActiveState "
+        . "-p SubState "
+        . "-p ExecMainStartTimestamp "
+        . "2>/dev/null",
+        $output
+    );
+
+    foreach ($output as $line) {
+
+        if (! str_contains($line, '=')) {
+            continue;
+        }
+
+        [$key, $value] = explode('=', $line, 2);
+
+        $properties[$key] = trim($value);
+    }
+
+    return $properties;
+}
+
+
+    protected function isRunning(string $service): bool
+    {
+        exec(
+            "systemctl is-active {$service} 2>/dev/null",
+            $output,
+            $code
+        );
+
+        return ($output[0] ?? '') === 'active';
+    }
+
+    protected function isEnabled(string $service): bool
+    {
+        exec(
+            "systemctl is-enabled {$service} 2>/dev/null",
+            $output,
+            $code
+        );
+
+        return ($output[0] ?? '') === 'enabled';
+    }
+}

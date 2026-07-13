@@ -10,11 +10,14 @@
 
         @include('partials.topbar')
 
-        <main class="space-y-6 p-6">
+	<main wire:poll.10s class="space-y-6 p-6">
+
 
             <livewire:dashboard.health-header />
 
             <livewire:dashboard.resource-cards />
+
+	    <livewire:dashboard.service-center />
 
             <div class="grid gap-6 xl:grid-cols-2">
 

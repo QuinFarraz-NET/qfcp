@@ -2,15 +2,34 @@
 
 namespace App\Core\QFSense\DTO;
 
-class TelemetrySnapshot
+final readonly class TelemetrySnapshot
 {
     public function __construct(
-        public readonly array $cpu = [],
-        public readonly array $memory = [],
-        public readonly array $disk = [],
-        public readonly array $network = [],
-        public readonly array $uptime = [],
-        public readonly array $services = [],
+        public array $cpu = [],
+        public array $memory = [],
+        public array $disk = [],
+        public array $network = [],
+        public array $uptime = [],
+        public array $services = [],
     ) {
+    }
+
+    public function toArray(): array
+    {
+        return [
+
+            'cpu' => $this->cpu,
+
+            'memory' => $this->memory,
+
+            'disk' => $this->disk,
+
+            'network' => $this->network,
+
+            'uptime' => $this->uptime,
+
+            'services' => $this->services,
+
+        ];
     }
 }
